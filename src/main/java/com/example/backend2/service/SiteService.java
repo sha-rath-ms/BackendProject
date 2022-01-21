@@ -41,7 +41,13 @@ public class SiteService {
             log.warn("Url is not valid:{}", sites.getUrl());
             throw new ValidationException(new ResultInfo("Invalid Url"));
         }
-        if (siteRepository.findAll().stream().filter(siteTable -> siteTable.getUserId() == id).map(SiteTable::getSiteName).collect(Collectors.toList()).contains(sites.getSiteName())) {
+        if (siteRepository
+                .findAll()
+                .stream()
+                .filter(siteTable -> siteTable.getUserId() == id)
+                .map(SiteTable::getSiteName)
+                .collect(Collectors.toList())
+                .contains(sites.getSiteName())) {
             log.warn("Site name already exist");
             throw new ValidationException(ResultInfoConstants.SITE_NAME_ALREADYEXISTS);
         }
@@ -67,12 +73,23 @@ public class SiteService {
     }
 
     public Collection<ResponseSiteNameAndPwd> getSiteNameAndPwd(long id) {
-        return siteRepository.findAll().stream().filter(siteTable -> siteTable.getUserId() == id).map(siteTable -> new ResponseSiteNameAndPwd(siteTable.getSiteName(), siteTable.getPassword())).collect(Collectors.toSet());
+        return siteRepository
+                .findAll()
+                .stream()
+                .filter(siteTable -> siteTable.getUserId() == id)
+                .map(siteTable -> new ResponseSiteNameAndPwd(siteTable.getSiteName(), siteTable.getPassword()))
+                .collect(Collectors.toSet());
     }
 
     public List<ResponseSiteNameAndPwd> getBySector(long id, Sector sector) {
 
-        return siteRepository.findAll().stream().filter(siteTable -> siteTable.getUserId() == id).filter(siteTable -> siteTable.getSector() == sector).map(siteTable -> new ResponseSiteNameAndPwd(siteTable.getSiteName(), siteTable.getPassword())).collect(Collectors.toList());
+        return siteRepository
+                .findAll()
+                .stream()
+                .filter(siteTable -> siteTable.getUserId() == id)
+                .filter(siteTable -> siteTable.getSector() == sector)
+                .map(siteTable -> new ResponseSiteNameAndPwd(siteTable.getSiteName(), siteTable.getPassword()))
+                .collect(Collectors.toList());
     }
 
     public Sites getBySiteName(long id, String siteName) {
@@ -90,12 +107,11 @@ public class SiteService {
         return sites.get();
     }
 
-    public List<ResponseSiteNameAndPwd> search(String siteName,long id)
-    {
-        return siteRepository.search(siteName,id)
+    public List<ResponseSiteNameAndPwd> search(String siteName, long id) {
+        return siteRepository.search(siteName, id)
                 .stream()
                 .map(siteTable ->
-                        new ResponseSiteNameAndPwd(siteTable.getSiteName(),siteTable.getPassword()))
+                        new ResponseSiteNameAndPwd(siteTable.getSiteName(), siteTable.getPassword()))
                 .collect(Collectors.toList());
     }
 
@@ -104,12 +120,24 @@ public class SiteService {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        Optional<SiteTable> oldSite = siteRepository.findAll().stream().filter(siteTable -> siteTable.getUserId() == id).filter(siteTable -> siteTable.getSiteName().equals(siteName)).findAny();
+        Optional<SiteTable> oldSite = siteRepository
+                .findAll()
+                .stream()
+                .filter(siteTable -> siteTable.getUserId() == id)
+                .filter(siteTable -> siteTable.getSiteName().equals(siteName))
+                .findAny();
         if (!oldSite.isPresent()) {
             log.warn("Site name not found");
             throw new ValidationException(ResultInfoConstants.SITE_NAME_NOTFOUND);
         }
-        if (siteRepository.findAll().stream().filter(siteTable -> siteTable.getUserId() == id).filter(siteTable -> siteTable.getUserId() != oldSite.get().getUserId()).filter(siteTable -> siteTable.getSiteName().equals(sites.getSiteName())).findAny().isPresent()) {
+        if (siteRepository
+                .findAll()
+                .stream()
+                .filter(siteTable -> siteTable.getUserId() == id)
+                .filter(siteTable -> siteTable.getUserId() != oldSite.get().getUserId())
+                .filter(siteTable -> siteTable.getSiteName().equals(sites.getSiteName()))
+                .findAny()
+                .isPresent()) {
             log.warn("Site name already exist");
             throw new ValidationException(ResultInfoConstants.SITE_NAME_ALREADYEXISTS);
         }

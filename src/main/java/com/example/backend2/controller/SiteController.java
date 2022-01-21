@@ -54,8 +54,7 @@ public class SiteController {
 
     @GetMapping("/{id}/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper<ResponseSiteNameAndPwd> search(@PathVariable long id,@RequestBody String siteName)
-    {
-        return new ResponseWrapper(ResultInfoConstants.SUCCESS,siteService.search(siteName,id));
+    public ResponseWrapper<ResponseSiteNameAndPwd> search(@PathVariable long id, @RequestBody String siteName) {
+        return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.search(siteName, id));
     }
 }

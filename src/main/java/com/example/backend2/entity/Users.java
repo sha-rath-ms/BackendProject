@@ -16,8 +16,7 @@ public class Users {
         this.pin = pin;
     }
 
-    public UserTable toUserTable()
-    {
-        return new UserTable(this.id,this.pin);
+    public UserTable toUserTable() {
+        return new UserTable(this.id, this.pin);
     }
 }
