@@ -20,14 +20,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PutMapping("/signin")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper<Long> login(@RequestBody @Valid Users user) {
-        log.info("logging in");
-        userService.login(user);
-        return new ResponseWrapper(ResultInfoConstants.SUCCESS, user.getId());
-    }
-
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.OK)
     public ResponseWrapper signUp(@RequestBody @Valid Users user) {
@@ -35,7 +27,7 @@ public class UserController {
         return new ResponseWrapper(ResultInfoConstants.SUCCESS, null);
     }
 
-    @PutMapping("/forgotPassword")
+    @GetMapping("/forgotPassword")
     @ResponseStatus(HttpStatus.OK)
     public ResponseWrapper<Integer> forgotPassword(@RequestBody long id) {
         return new ResponseWrapper(ResultInfoConstants.SUCCESS, userService.forgotPassword(id));
