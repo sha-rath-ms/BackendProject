@@ -4,6 +4,7 @@ import com.example.backend2.exception.ValidationException;
 import com.example.backend2.repository.UserRepository;
 import com.example.backend2.repository.table.UserTable;
 import com.example.backend2.response.ResultInfoConstants;
+import com.example.backend2.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,9 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

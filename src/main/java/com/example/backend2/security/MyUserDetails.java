@@ -16,7 +16,7 @@ public class MyUserDetails implements UserDetails {
 
     public MyUserDetails(UserTable userTable) {
         this.userName = Long.toString(userTable.getId());
-        this.password = Integer.toString(userTable.getPin());
+        this.password = userTable.getPin();
     }
 
     @Override

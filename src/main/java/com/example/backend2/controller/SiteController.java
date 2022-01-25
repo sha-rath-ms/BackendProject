@@ -6,7 +6,6 @@ import com.example.backend2.response.ResponseWrapper;
 import com.example.backend2.response.ResultInfoConstants;
 import com.example.backend2.sector.Sector;
 import com.example.backend2.service.SiteService;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +29,13 @@ public class SiteController {
 
     @GetMapping("/{id}/home")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper<JSONObject> getAll(@PathVariable long id) {
+    public ResponseWrapper<ResponseSiteNameAndPwd> getAll(@PathVariable long id) {
         return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.getSiteNameAndPwd(id));
     }
 
     @GetMapping("/{id}/{sector}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper<JSONObject> getBySector(@PathVariable long id, @PathVariable Sector sector) {
+    public ResponseWrapper<ResponseSiteNameAndPwd> getBySector(@PathVariable long id, @PathVariable Sector sector) {
         return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.getBySector(id, sector));
     }
 

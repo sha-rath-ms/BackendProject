@@ -1,6 +1,5 @@
 package com.example.backend2.repository.table;
 
-import com.example.backend2.entity.Users;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,19 +17,16 @@ import java.time.Instant;
 public class UserTable {
     @Id
     private long id;
-    private int pin;
+    private String pin;
     private int otp;
     @CreationTimestamp
     private Instant created_at;
     @UpdateTimestamp
     private Instant updated_at;
 
-    public UserTable(long id, int pin) {
+    public UserTable(long id, String pin) {
         this.id = id;
         this.pin = pin;
     }
 
-    public Users toUser() {
-        return new Users(this.id, this.pin);
-    }
 }
