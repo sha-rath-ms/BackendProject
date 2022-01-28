@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class Sites {
+    private final long id;
     @NotNull
     private final String url;
     @NotNull

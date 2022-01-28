@@ -5,55 +5,53 @@ import com.example.backend2.response.ResponseSiteNameAndPwd;
 import com.example.backend2.response.ResponseWrapper;
 import com.example.backend2.response.ResultInfoConstants;
 import com.example.backend2.sector.Sector;
+import com.example.backend2.security.GetUser;
 import com.example.backend2.service.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/safepass")
 public class SiteController {
 
     @Autowired
     SiteService siteService;
 
-    @PostMapping("/{id}/addsite")
+    @Autowired
+    GetUser getUser;
+
+    @PostMapping("/addsite")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper insert(@PathVariable long id, @RequestBody @Valid Sites sites) throws IOException {
-        siteService.insert(id, sites);
+    public ResponseWrapper insert(HttpServletRequest request, @RequestBody @Valid Sites sites) throws IOException {
+        siteService.insert(Long.parseLong(getUser.getId(request)), sites);
         return new ResponseWrapper(ResultInfoConstants.SUCCESS, null);
     }
 
-    @GetMapping("/{id}/home")
+    @GetMapping("/home")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper<ResponseSiteNameAndPwd> getAll(@PathVariable long id) {
-        return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.getSiteNameAndPwd(id));
+    public ResponseWrapper<ResponseSiteNameAndPwd> getAll(HttpServletRequest request) {
+        return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.getSiteNameAndPwd(Long.parseLong(getUser.getId(request))));
     }
 
-    @GetMapping("/{id}/{sector}")
+    @GetMapping("/{sector}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper<ResponseSiteNameAndPwd> getBySector(@PathVariable long id, @PathVariable Sector sector) {
-        return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.getBySector(id, sector));
+    public ResponseWrapper<ResponseSiteNameAndPwd> getBySector(HttpServletRequest request, @PathVariable Sector sector) {
+        return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.getBySector(Long.parseLong(getUser.getId(request)), sector));
     }
 
-    @GetMapping("/{id}/view/")
+    @PutMapping("/edit")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper<Sites> getBySiteName(@PathVariable long id, @RequestBody ResponseSiteNameAndPwd siteName) {
-        return new ResponseWrapper<>(ResultInfoConstants.SUCCESS, siteService.getBySiteName(id, siteName.getSiteName()));
+    public ResponseWrapper update(HttpServletRequest request,@RequestBody @Valid Sites sites) throws IOException {
+        return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.update(Long.parseLong(getUser.getId(request)), sites));
     }
 
-    @PutMapping("/{id}/edit/{siteName}")
+    @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper update(@PathVariable long id, @PathVariable String siteName, @RequestBody @Valid Sites sites) {
-        return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.update(id, siteName, sites));
-    }
-
-    @GetMapping("/{id}/search")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper<ResponseSiteNameAndPwd> search(@PathVariable long id, @RequestBody String siteName) {
-        return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.search(siteName, id));
+    public ResponseWrapper<ResponseSiteNameAndPwd> search(HttpServletRequest request, @RequestBody String siteName) {
+        return new ResponseWrapper(ResultInfoConstants.SUCCESS, siteService.search(siteName, Long.parseLong(getUser.getId(request))));
     }
 }

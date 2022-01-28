@@ -41,12 +41,6 @@ public class SiteService {
             log.warn("Url is not valid:{}", sites.getUrl());
             throw new ValidationException(new ResultInfo("Invalid Url"));
         }
-        if (siteRepository
-                .getBySiteName(id, sites.getSiteName())
-                .isPresent()) {
-            log.warn("Site name already exist");
-            throw new ValidationException(ResultInfoConstants.SITE_NAME_ALREADYEXISTS);
-        }
         SiteTable newSite = sites.toSiteTable();
         newSite.setUserId(id);
         siteRepository.save(newSite);
@@ -118,20 +112,19 @@ public class SiteService {
                 .collect(Collectors.toList());
     }
 
-    public boolean update(long id, String siteName, Sites sites) {
+    public boolean update(long id, Sites sites) throws IOException{
         if (!userRepository.existsById(id)) {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        Optional<SiteTable> oldSite = siteRepository.getBySiteName(id, siteName);
+        Optional<SiteTable> oldSite = siteRepository.findById(sites.getId());
         if (!oldSite.isPresent()) {
             log.warn("Site name not found");
             throw new ValidationException(ResultInfoConstants.SITE_NAME_NOTFOUND);
         }
-        if (siteRepository
-                .siteNameExistsOrNot(sites.getSiteName(), id, oldSite.get().getId()).isPresent()) {
-            log.warn("Site name already exist");
-            throw new ValidationException(ResultInfoConstants.SITE_NAME_ALREADYEXISTS);
+        if (!isUrlValid(sites.getUrl())) {
+            log.warn("Url is not valid:{}", sites.getUrl());
+            throw new ValidationException(new ResultInfo("Invalid Url"));
         }
         SiteTable newSite = sites.toSiteTable();
         newSite.setId(oldSite.get().getId());
