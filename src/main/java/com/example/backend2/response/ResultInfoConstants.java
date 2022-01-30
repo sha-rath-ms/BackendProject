@@ -10,8 +10,8 @@ public class ResultInfoConstants {
     public static final ResultInfo INVALID_PIN = new ResultInfo("Pin is not valid");
     public static final ResultInfo INVALID_USER = new ResultInfo("User is not valid");
     public static final ResultInfo INVALID_OTP = new ResultInfo("OTP is not valid");
-    public static final ResultInfo SITE_NAME_ALREADYEXISTS = new ResultInfo("Site name already exists");
-    public static final ResultInfo SITE_NAME_NOTFOUND = new ResultInfo("Site name not found");
+    public static final ResultInfo SITE_NAME_NOT_FOUND = new ResultInfo("Site name not found");
     public static final ResultInfo SUCCESS = new ResultInfo("Success");
     public static final ResultInfo OTP_SENT = new ResultInfo("OTP is sent to the mobile number");
+    public static final ResultInfo INVALID_SITE_ID = new ResultInfo("site id is not present in this user id");
 }

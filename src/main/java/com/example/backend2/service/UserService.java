@@ -10,24 +10,23 @@ import com.example.backend2.repository.table.UserTable;
 import com.example.backend2.response.ResultInfoConstants;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Random;
+
+import static com.example.backend2.extract.GenerateOtp.getOtp;
 
 @Service
 @Slf4j
 @Data
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
 
-    public boolean insert(Users users) {
+    public void insert(Users users) {
         if (userRepository.existsById(users.getId())) {
             log.warn("User is already present with id:{}", users.getId());
             throw new DuplicateKeyException(ResultInfoConstants.DUPLICATE_USER, users.getId());
@@ -43,7 +42,6 @@ public class UserService {
             log.warn("User mobile number is not valid");
             throw new ValidationException(ResultInfoConstants.NUMBER_VALIDATION);
         }
-        return true;
     }
 
     public int forgotPassword(long id) {
@@ -52,16 +50,15 @@ public class UserService {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        Random random = new Random();
         UserTable newUser = oldUser.get();
-        int otp = random.nextInt(9999 - 1000) + 1000;
+        int otp = getOtp();
         newUser.setOtp(otp);
         newUser.setCreated_at(oldUser.get().getCreated_at());
         userRepository.save(oldUser.get());
         return otp;
     }
 
-    public boolean changePassword(long id, int password) {
+    public void changePassword(long id, int password) {
         Optional<UserTable> oldUser = userRepository.findById(id);
         if (!oldUser.isPresent()) {
             log.warn("User not found with id:{}", id);
@@ -74,7 +71,6 @@ public class UserService {
         UserTable newUser = new Users(id, password).toUserTable(passwordEncoder);
         newUser.setCreated_at(oldUser.get().getCreated_at());
         userRepository.save(newUser);
-        return true;
     }
 
     public boolean otpValidation(long id, int otp) {

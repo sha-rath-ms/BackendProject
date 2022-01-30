@@ -6,33 +6,34 @@ import com.example.backend2.exception.ValidationException;
 import com.example.backend2.repository.SiteRepository;
 import com.example.backend2.repository.UserRepository;
 import com.example.backend2.repository.table.SiteTable;
-import com.example.backend2.response.ResponseSiteNameAndPwd;
 import com.example.backend2.response.ResultInfo;
 import com.example.backend2.response.ResultInfoConstants;
 import com.example.backend2.sector.Sector;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.example.backend2.extract.UrlValidOrNot.isUrlValid;
+
 @Slf4j
 @Service
+@Data
 public class SiteService {
 
-    @Autowired
-    private SiteRepository siteRepository;
+    private final SiteRepository siteRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public boolean insert(long id, Sites sites) throws IOException {
+    public void insert(long id, Sites sites) throws IOException {
         if (!userRepository.existsById(id)) {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
@@ -44,75 +45,60 @@ public class SiteService {
         SiteTable newSite = sites.toSiteTable();
         newSite.setUserId(id);
         siteRepository.save(newSite);
-        return true;
     }
 
-    public boolean isUrlValid(String siteUrl) throws IOException {
-        try {
-            URL url = new URL(siteUrl.toString());
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            int responseCode = conn.getResponseCode();
-            if (responseCode == 200) {
-                return true;
-            }
-        } catch (Exception e) {
-            log.warn("Invalid URL");
-            throw new ValidationException(new ResultInfo(e.getMessage()));
-        }
-        return false;
-    }
-
-    public Collection<ResponseSiteNameAndPwd> getSiteNameAndPwd(long id) {
+    public List<Sites> getAll(long id, Integer pageNo) {
         if (!userRepository.existsById(id)) {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        return siteRepository
-                .getSiteNameAndPwd(id)
-                .stream()
-                .map(siteTable -> new ResponseSiteNameAndPwd(siteTable.getSiteName(), siteTable.getPassword()))
-                .collect(Collectors.toSet());
+        Pageable pageable = PageRequest.of(pageNo, 3);
+        Page<SiteTable> pagedResult = siteRepository.findByUserId(id, pageable);
+        if (pagedResult.hasContent()) {
+            return pagedResult.getContent()
+                    .stream()
+                    .map(SiteTable::toSite)
+                    .collect(Collectors.toList());
+        } else {
+            return new ArrayList<Sites>();
+        }
     }
 
-    public List<ResponseSiteNameAndPwd> getBySector(long id, Sector sector) {
+    public List<Sites> getBySector(long id, Sector sector, Integer pageNo) {
         if (!userRepository.existsById(id)) {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        return siteRepository.getSiteNameAndPwd(id)
-                .stream()
-                .filter(siteTable -> siteTable.getSector().equals(sector))
-                .map(siteTable -> new ResponseSiteNameAndPwd(siteTable.getSiteName(), siteTable.getPassword()))
-                .collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(pageNo, 3);
+        Page<SiteTable> pagedResult = siteRepository.findBySector(id, sector.ordinal(), pageable);
+        if (pagedResult.hasContent()) {
+            return pagedResult.getContent()
+                    .stream()
+                    .map(SiteTable::toSite)
+                    .collect(Collectors.toList());
+        } else {
+            return new ArrayList<Sites>();
+        }
     }
 
-    public Sites getBySiteName(long id, String siteName) {
+    public List<Sites> search(String siteName, long id, Integer pageNo) {
         if (!userRepository.existsById(id)) {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        Optional<SiteTable> sites = siteRepository.getBySiteName(id, siteName);
-        if (!sites.isPresent()) {
-            log.warn("Site with siteName:{} is not present", siteName);
-            throw new KeyNotFoundException(ResultInfoConstants.SITE_NAME_NOTFOUND);
+        Pageable pageable = PageRequest.of(pageNo, 3);
+        Page<SiteTable> pagedResult = siteRepository.search(siteName, id, pageable);
+        if (pagedResult.hasContent()) {
+            return pagedResult.getContent()
+                    .stream()
+                    .map(SiteTable::toSite)
+                    .collect(Collectors.toList());
+        } else {
+            return new ArrayList<Sites>();
         }
-        return sites.get().toSite();
     }
 
-    public List<ResponseSiteNameAndPwd> search(String siteName, long id) {
-        if (!userRepository.existsById(id)) {
-            log.warn("User not found with id:{}", id);
-            throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
-        }
-        return siteRepository.search(siteName, id)
-                .stream()
-                .map(siteTable ->
-                        new ResponseSiteNameAndPwd(siteTable.getSiteName(), siteTable.getPassword()))
-                .collect(Collectors.toList());
-    }
-
-    public boolean update(long id, Sites sites) throws IOException{
+    public boolean update(long id, Sites sites) throws IOException {
         if (!userRepository.existsById(id)) {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
@@ -120,7 +106,11 @@ public class SiteService {
         Optional<SiteTable> oldSite = siteRepository.findById(sites.getId());
         if (!oldSite.isPresent()) {
             log.warn("Site name not found");
-            throw new ValidationException(ResultInfoConstants.SITE_NAME_NOTFOUND);
+            throw new ValidationException(ResultInfoConstants.SITE_NAME_NOT_FOUND);
+        }
+        if (oldSite.get().getUserId() != id) {
+            log.warn("site id is not present in this user id");
+            throw new ValidationException(ResultInfoConstants.INVALID_SITE_ID);
         }
         if (!isUrlValid(sites.getUrl())) {
             log.warn("Url is not valid:{}", sites.getUrl());

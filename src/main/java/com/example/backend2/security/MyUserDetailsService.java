@@ -5,8 +5,8 @@ import com.example.backend2.repository.UserRepository;
 import com.example.backend2.repository.table.UserTable;
 import com.example.backend2.response.ResultInfoConstants;
 import com.example.backend2.service.UserService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,13 +16,12 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@Data
 public class MyUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
