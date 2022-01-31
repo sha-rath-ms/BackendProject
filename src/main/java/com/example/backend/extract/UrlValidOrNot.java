@@ -1,7 +1,7 @@
-package com.example.backend2.extract;
+package com.example.backend.extract;
 
-import com.example.backend2.exception.ValidationException;
-import com.example.backend2.response.ResultInfo;
+import com.example.backend.exception.ValidationException;
+import com.example.backend.response.ResultInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

@@ -1,6 +1,6 @@
-package com.example.backend2.exception;
+package com.example.backend.exception;
 
-import com.example.backend2.response.ResultInfo;
+import com.example.backend.response.ResultInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

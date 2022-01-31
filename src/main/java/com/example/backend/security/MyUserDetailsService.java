@@ -1,10 +1,10 @@
-package com.example.backend2.security;
+package com.example.backend.security;
 
-import com.example.backend2.exception.ValidationException;
-import com.example.backend2.repository.UserRepository;
-import com.example.backend2.repository.table.UserTable;
-import com.example.backend2.response.ResultInfoConstants;
-import com.example.backend2.service.UserService;
+import com.example.backend.exception.ValidationException;
+import com.example.backend.repository.UserRepository;
+import com.example.backend.repository.table.UserTable;
+import com.example.backend.response.ResultInfoConstants;
+import com.example.backend.service.UserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

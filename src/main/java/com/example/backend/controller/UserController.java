@@ -1,10 +1,10 @@
-package com.example.backend2.controller;
+package com.example.backend.controller;
 
-import com.example.backend2.entity.Users;
-import com.example.backend2.response.ResponseWrapper;
-import com.example.backend2.response.ResultInfo;
-import com.example.backend2.response.ResultInfoConstants;
-import com.example.backend2.service.UserService;
+import com.example.backend.entity.Users;
+import com.example.backend.response.ResponseWrapper;
+import com.example.backend.response.ResultInfo;
+import com.example.backend.response.ResultInfoConstants;
+import com.example.backend.service.UserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

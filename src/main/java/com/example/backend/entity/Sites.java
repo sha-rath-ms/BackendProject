@@ -1,7 +1,7 @@
-package com.example.backend2.entity;
+package com.example.backend.entity;
 
-import com.example.backend2.repository.table.SiteTable;
-import com.example.backend2.sector.Sector;
+import com.example.backend.repository.table.SiteTable;
+import com.example.backend.sector.Sector;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

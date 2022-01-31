@@ -1,4 +1,4 @@
-package com.example.backend2.sector;
+package com.example.backend.sector;
 
 public enum Sector {
     SOCIAL,

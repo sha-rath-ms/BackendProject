@@ -1,6 +1,6 @@
-package com.example.backend2.entity;
+package com.example.backend.entity;
 
-import com.example.backend2.repository.table.UserTable;
+import com.example.backend.repository.table.UserTable;
 import lombok.Data;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

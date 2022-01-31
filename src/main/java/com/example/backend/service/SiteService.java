@@ -1,14 +1,14 @@
-package com.example.backend2.service;
+package com.example.backend.service;
 
-import com.example.backend2.entity.Sites;
-import com.example.backend2.exception.KeyNotFoundException;
-import com.example.backend2.exception.ValidationException;
-import com.example.backend2.repository.SiteRepository;
-import com.example.backend2.repository.UserRepository;
-import com.example.backend2.repository.table.SiteTable;
-import com.example.backend2.response.ResultInfo;
-import com.example.backend2.response.ResultInfoConstants;
-import com.example.backend2.sector.Sector;
+import com.example.backend.entity.Sites;
+import com.example.backend.exception.KeyNotFoundException;
+import com.example.backend.exception.ValidationException;
+import com.example.backend.repository.SiteRepository;
+import com.example.backend.repository.UserRepository;
+import com.example.backend.repository.table.SiteTable;
+import com.example.backend.response.ResultInfo;
+import com.example.backend.response.ResultInfoConstants;
+import com.example.backend.sector.Sector;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.backend2.extract.UrlValidOrNot.isUrlValid;
+import static com.example.backend.extract.UrlValidOrNot.isUrlValid;
 
 @Slf4j
 @Service

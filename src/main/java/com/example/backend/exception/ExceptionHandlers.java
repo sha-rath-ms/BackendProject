@@ -1,6 +1,6 @@
-package com.example.backend2.exception;
+package com.example.backend.exception;
 
-import com.example.backend2.response.ResponseWrapper;
+import com.example.backend.response.ResponseWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

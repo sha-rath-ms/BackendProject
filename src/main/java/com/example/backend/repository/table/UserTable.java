@@ -1,4 +1,4 @@
-package com.example.backend2.repository.table;
+package com.example.backend.repository.table;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
-package com.example.backend2;
+package com.example.backend;
 
-import com.example.backend2.repository.UserRepository;
+import com.example.backend.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;

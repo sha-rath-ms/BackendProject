@@ -1,11 +1,11 @@
-package com.example.backend2.controller;
+package com.example.backend.controller;
 
-import com.example.backend2.entity.Sites;
-import com.example.backend2.response.ResponseWrapper;
-import com.example.backend2.response.ResultInfoConstants;
-import com.example.backend2.sector.Sector;
-import com.example.backend2.security.GetUser;
-import com.example.backend2.service.SiteService;
+import com.example.backend.entity.Sites;
+import com.example.backend.response.ResponseWrapper;
+import com.example.backend.response.ResultInfoConstants;
+import com.example.backend.sector.Sector;
+import com.example.backend.security.GetUser;
+import com.example.backend.service.SiteService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

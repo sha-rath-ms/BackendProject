@@ -1,4 +1,4 @@
-package com.example.backend2.security;
+package com.example.backend.security;
 
 import lombok.Data;
 import org.springframework.context.annotation.Bean;

@@ -1,7 +1,7 @@
-package com.example.backend2.repository.table;
+package com.example.backend.repository.table;
 
-import com.example.backend2.entity.Sites;
-import com.example.backend2.sector.Sector;
+import com.example.backend.entity.Sites;
+import com.example.backend.sector.Sector;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;

@@ -1,4 +1,4 @@
-package com.example.backend2.response;
+package com.example.backend.response;
 
 import lombok.Data;
 

@@ -1,6 +1,5 @@
-package com.example.backend2.security;
+package com.example.backend.security;
 
-import ch.qos.logback.core.hook.DelayingShutdownHook;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;

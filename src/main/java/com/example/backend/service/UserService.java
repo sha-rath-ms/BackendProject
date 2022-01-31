@@ -1,13 +1,13 @@
-package com.example.backend2.service;
+package com.example.backend.service;
 
-import com.example.backend2.entity.Users;
-import com.example.backend2.exception.DuplicateKeyException;
-import com.example.backend2.exception.InCorrectPinException;
-import com.example.backend2.exception.KeyNotFoundException;
-import com.example.backend2.exception.ValidationException;
-import com.example.backend2.repository.UserRepository;
-import com.example.backend2.repository.table.UserTable;
-import com.example.backend2.response.ResultInfoConstants;
+import com.example.backend.entity.Users;
+import com.example.backend.exception.DuplicateKeyException;
+import com.example.backend.exception.InCorrectPinException;
+import com.example.backend.exception.KeyNotFoundException;
+import com.example.backend.exception.ValidationException;
+import com.example.backend.repository.UserRepository;
+import com.example.backend.repository.table.UserTable;
+import com.example.backend.response.ResultInfoConstants;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.example.backend2.extract.GenerateOtp.getOtp;
+import static com.example.backend.extract.GenerateOtp.getOtp;
 
 @Service
 @Slf4j

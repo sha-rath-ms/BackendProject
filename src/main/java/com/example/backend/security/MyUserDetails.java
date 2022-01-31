@@ -1,6 +1,6 @@
-package com.example.backend2.security;
+package com.example.backend.security;
 
-import com.example.backend2.repository.table.UserTable;
+import com.example.backend.repository.table.UserTable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

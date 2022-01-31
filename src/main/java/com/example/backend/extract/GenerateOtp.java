@@ -1,4 +1,4 @@
-package com.example.backend2.extract;
+package com.example.backend.extract;
 
 import java.util.Random;
 
