@@ -3,6 +3,7 @@ package com.example.backend.entity;
 import com.example.backend.repository.table.SiteTable;
 import com.example.backend.sector.Sector;
 import lombok.Data;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotNull;
 
@@ -21,7 +22,7 @@ public class Sites {
     private final String password;
     private final String notes;
 
-    public SiteTable toSiteTable() {
-        return new SiteTable(this.url, this.siteName, this.sector, this.userName, this.password, this.notes);
+    public SiteTable toSiteTable(PasswordEncoder passwordEncoder) {
+        return new SiteTable(this.url, this.siteName, this.sector, this.userName, passwordEncoder.encode(this.password), this.notes);
     }
 }

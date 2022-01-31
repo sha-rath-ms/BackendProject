@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class SiteService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public void insert(long id, Sites sites) throws IOException {
         if (!userRepository.existsById(id)) {
             log.warn("User not found with id:{}", id);
@@ -42,7 +45,7 @@ public class SiteService {
             log.warn("Url is not valid:{}", sites.getUrl());
             throw new ValidationException(new ResultInfo("Invalid Url"));
         }
-        SiteTable newSite = sites.toSiteTable();
+        SiteTable newSite = sites.toSiteTable(passwordEncoder);
         newSite.setUserId(id);
         siteRepository.save(newSite);
     }
@@ -116,8 +119,7 @@ public class SiteService {
             log.warn("Url is not valid:{}", sites.getUrl());
             throw new ValidationException(new ResultInfo("Invalid Url"));
         }
-        SiteTable newSite = sites.toSiteTable();
-        newSite.setId(oldSite.get().getId());
+        SiteTable newSite = sites.toSiteTable(passwordEncoder);
         newSite.setCreated_at(oldSite.get().getCreated_at());
         newSite.setUserId(id);
         siteRepository.save(newSite);
