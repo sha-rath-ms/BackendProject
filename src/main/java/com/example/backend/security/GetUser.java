@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,10 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Service
 @Slf4j
+@Data
 public class GetUser {
-    public String getId(HttpServletRequest request)
+    private final JwtTokenUtil jwtTokenUtil;
+    public Long getId(HttpServletRequest request)
     {
         String username=null;
         String authHeader=request.getHeader(AUTHORIZATION);
@@ -22,10 +25,7 @@ public class GetUser {
         {
             try {
                 String token = authHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(token);
-                username = decodedJWT.getSubject();
+                username = jwtTokenUtil.getUsernameFromToken(token);
             }
             catch (Exception e)
             {
@@ -34,6 +34,6 @@ public class GetUser {
         }
         else
             throw new RuntimeException();
-        return username;
+        return Long.parseLong(username);
     }
 }

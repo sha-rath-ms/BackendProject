@@ -9,6 +9,7 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.repository.table.UserTable;
 import com.example.backend.response.ResultInfoConstants;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import static com.example.backend.extract.GenerateOtp.getOtp;
 
 @Service
 @Slf4j
-@Data
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;

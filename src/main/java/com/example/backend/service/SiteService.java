@@ -9,7 +9,7 @@ import com.example.backend.repository.table.SiteTable;
 import com.example.backend.response.ResultInfo;
 import com.example.backend.response.ResultInfoConstants;
 import com.example.backend.sector.Sector;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ import static com.example.backend.extract.UrlValidOrNot.isUrlValid;
 
 @Slf4j
 @Service
-@Data
+@RequiredArgsConstructor
 public class SiteService {
 
     private final SiteRepository siteRepository;
@@ -36,7 +36,9 @@ public class SiteService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public void insert(long id, Sites sites) throws IOException {
+    private static final int PAGE_SIZE = 3;
+
+    public Long insert(long id, Sites sites) throws IOException {
         if (!userRepository.existsById(id)) {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
@@ -48,6 +50,7 @@ public class SiteService {
         SiteTable newSite = sites.toSiteTable(passwordEncoder);
         newSite.setUserId(id);
         siteRepository.save(newSite);
+        return newSite.getId();
     }
 
     public List<Sites> getAll(long id, Integer pageNo) {
@@ -55,16 +58,15 @@ public class SiteService {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        Pageable pageable = PageRequest.of(pageNo, 3);
+        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
         Page<SiteTable> pagedResult = siteRepository.findByUserId(id, pageable);
-        if (pagedResult.hasContent()) {
-            return pagedResult.getContent()
-                    .stream()
-                    .map(SiteTable::toSite)
-                    .collect(Collectors.toList());
-        } else {
-            return new ArrayList<Sites>();
+        if (!pagedResult.hasContent()) {
+            return Collections.emptyList();
         }
+        return pagedResult.getContent()
+                .stream()
+                .map(SiteTable::toSite)
+                .collect(Collectors.toList());
     }
 
     public List<Sites> getBySector(long id, Sector sector, Integer pageNo) {
@@ -72,16 +74,15 @@ public class SiteService {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        Pageable pageable = PageRequest.of(pageNo, 3);
+        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
         Page<SiteTable> pagedResult = siteRepository.findBySector(id, sector.ordinal(), pageable);
-        if (pagedResult.hasContent()) {
-            return pagedResult.getContent()
-                    .stream()
-                    .map(SiteTable::toSite)
-                    .collect(Collectors.toList());
-        } else {
-            return new ArrayList<Sites>();
+        if (!pagedResult.hasContent()) {
+            return Collections.emptyList();
         }
+        return pagedResult.getContent()
+                .stream()
+                .map(SiteTable::toSite)
+                .collect(Collectors.toList());
     }
 
     public List<Sites> search(String siteName, long id, Integer pageNo) {
@@ -89,16 +90,15 @@ public class SiteService {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        Pageable pageable = PageRequest.of(pageNo, 3);
+        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE);
         Page<SiteTable> pagedResult = siteRepository.search(siteName, id, pageable);
-        if (pagedResult.hasContent()) {
-            return pagedResult.getContent()
-                    .stream()
-                    .map(SiteTable::toSite)
-                    .collect(Collectors.toList());
-        } else {
-            return new ArrayList<Sites>();
+        if (!pagedResult.hasContent()) {
+            return Collections.emptyList();
         }
+        return pagedResult.getContent()
+                .stream()
+                .map(SiteTable::toSite)
+                .collect(Collectors.toList());
     }
 
     public boolean update(long id, Sites sites) throws IOException {
@@ -120,6 +120,7 @@ public class SiteService {
             throw new ValidationException(new ResultInfo("Invalid Url"));
         }
         SiteTable newSite = sites.toSiteTable(passwordEncoder);
+        newSite.setId(oldSite.get().getId());
         newSite.setCreated_at(oldSite.get().getCreated_at());
         newSite.setUserId(id);
         siteRepository.save(newSite);
