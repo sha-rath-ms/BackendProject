@@ -14,15 +14,10 @@ public class UrlValidOrNot {
         try {
             URL url = new URL(siteUrl.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            int responseCode = conn.getResponseCode();
-            if (responseCode == 200) {
-                return true;
-            }
+            return true;
         } catch (Exception e) {
             log.warn("Invalid URL");
             throw new ValidationException(new ResultInfo(e.getMessage()));
         }
-        return false;
     }
 }
