@@ -9,7 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Slf4j
-public class UrlValidOrNot  {
+public class UrlValidOrNot {
     public static boolean isUrlValid(String siteUrl) throws IOException {
         try {
             URL url = new URL(siteUrl.toString());

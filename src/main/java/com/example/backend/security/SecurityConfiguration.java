@@ -1,6 +1,5 @@
 package com.example.backend.security;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,8 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/signup**", "/recoverPassword**", "/forgotPassword**", "/forgotPassword/**")
                 .anonymous();
-        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean(),jwtTokenUtil));
-        http.addFilterBefore(new CustomAuthorizationFilter(jwtTokenUtil,myUserDetailsService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean(), jwtTokenUtil));
+        http.addFilterBefore(new CustomAuthorizationFilter(jwtTokenUtil, myUserDetailsService), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

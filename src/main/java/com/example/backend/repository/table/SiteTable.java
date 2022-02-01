@@ -43,7 +43,7 @@ public class SiteTable {
     }
 
     public Sites toSite() {
-        return new Sites(this.id,this.url, this.siteName, this.sector, this.userName, this.password, this.notes);
+        return new Sites(this.id, this.url, this.siteName, this.sector, this.userName, this.password, this.notes);
     }
 
 }

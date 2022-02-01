@@ -8,7 +8,6 @@ import com.example.backend.exception.ValidationException;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.repository.table.UserTable;
 import com.example.backend.response.ResultInfoConstants;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -106,12 +106,8 @@ public class SiteService {
             log.warn("User not found with id:{}", id);
             throw new KeyNotFoundException(ResultInfoConstants.INVALID_USER);
         }
-        Optional<SiteTable> oldSite = siteRepository.findById(sites.getId());
+        Optional<SiteTable> oldSite = siteRepository.findByIdAndName(id, sites.getId());
         if (!oldSite.isPresent()) {
-            log.warn("Site name not found");
-            throw new ValidationException(ResultInfoConstants.SITE_NAME_NOT_FOUND);
-        }
-        if (oldSite.get().getUserId() != id) {
             log.warn("site id is not present in this user id");
             throw new ValidationException(ResultInfoConstants.INVALID_SITE_ID);
         }
