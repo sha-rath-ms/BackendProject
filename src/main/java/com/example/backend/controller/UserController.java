@@ -4,6 +4,7 @@ import com.example.backend.entity.Users;
 import com.example.backend.response.ResponseWrapper;
 import com.example.backend.response.ResultInfo;
 import com.example.backend.response.ResultInfoConstants;
+import com.example.backend.security.JwtTokenUtil;
 import com.example.backend.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -19,6 +21,8 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+
+    private final JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.OK)
@@ -40,11 +44,11 @@ public class UserController {
         return new ResponseWrapper(new ResultInfo("Password is recovered succesfully for " + users.getId()), null);
     }
 
-    @PutMapping("/{id}/changePassword")
+    @PutMapping("/changePassword")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseWrapper changePassword(@PathVariable long id, @RequestBody int pin) {
-        userService.changePassword(id, pin);
-        return new ResponseWrapper(new ResultInfo("Password is reset succesfully for " + id), null);
+    public ResponseWrapper changePassword(HttpServletRequest request, @RequestBody int pin) {
+        userService.changePassword(jwtTokenUtil.getId(request), pin);
+        return new ResponseWrapper(new ResultInfo("Password is reset succesfully for " + jwtTokenUtil.getId(request)), null);
     }
 
     @PutMapping("/forgotPassword/{id}")

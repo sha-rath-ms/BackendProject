@@ -3,15 +3,20 @@ package com.example.backend.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 @Component
+@Slf4j
 public class JwtTokenUtil {
     public static final long JWT_TOKEN_VALIDITY = 5 * 60;
 
@@ -55,5 +60,20 @@ public class JwtTokenUtil {
     public Boolean validateToken(String token, MyUserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public Long getId(HttpServletRequest request) {
+        String username = null;
+        String authHeader = request.getHeader(AUTHORIZATION);
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            try {
+                String token = authHeader.substring("Bearer ".length());
+                username = getUsernameFromToken(token);
+            } catch (Exception e) {
+                log.error("Error logging in:{}", e.getMessage());
+            }
+        } else
+            throw new RuntimeException();
+        return Long.parseLong(username);
     }
 }
