@@ -13,7 +13,6 @@ public class UrlValidOrNot {
     public static boolean isUrlValid(String siteUrl) throws IOException {
         try {
             URL url = new URL(siteUrl.toString());
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             return true;
         } catch (Exception e) {
             log.warn("Invalid URL");
